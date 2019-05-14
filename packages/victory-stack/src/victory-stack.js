@@ -49,7 +49,8 @@ export default class VictoryStack extends React.Component {
       data: PropTypes.object,
       labels: PropTypes.object
     }),
-    xOffset: PropTypes.number
+    xOffset: PropTypes.number,
+	y0: PropTypes.number
   };
 
   static defaultProps = {

@@ -50,7 +50,7 @@ function fillData(props, datasets) {
   });
 }
 
-function getY0(datum, index, datasets) {
+function getY0(props, datum, index, datasets) {
   if (datum.y0) {
     return datum.y0;
   }
@@ -71,7 +71,7 @@ function getY0(datum, index, datasets) {
     previousPoints.length &&
     previousPoints.reduce((memo, value) => {
       const sameSign = (y < 0 && value < 0) || (y >= 0 && value >= 0);
-      return sameSign ? +value + memo : memo;
+      return (sameSign || props.y0) ? +value + memo: memo;
     }, 0);
   return previousPoints.some((point) => point instanceof Date) ? new Date(y0) : y0;
 }
@@ -79,8 +79,9 @@ function getY0(datum, index, datasets) {
 /* eslint-disable no-nested-ternary */
 function addLayoutData(props, datasets, index) {
   const xOffset = props.xOffset || 0;
-  return datasets[index].map((datum) => {
-    const yOffset = getY0(datum, index, datasets) || 0;
+  return datasets[index].map((datum, i) => {
+    const yOffset = getY0(props, datum, index, datasets) || props.y0[i] || 0;
+	console.info(yOffset);
     return assign({}, datum, {
       _y0: !(datum._y instanceof Date) ? yOffset : yOffset ? new Date(yOffset) : datum._y,
       _y1:
